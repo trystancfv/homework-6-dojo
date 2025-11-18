@@ -1,0 +1,6 @@
+#!/bin/bash
+# Checker script is READABLE to the users.
+
+chmod 4755 /challenge/checker
+
+rm /challenge/.init
