@@ -1,5 +1,5 @@
-id: example
-name: Example Dojo
+id: proof
+name: Proof of Concept Dojo
 type: example
 image: pwncollege/challenge-legacy:latest
 modules:
