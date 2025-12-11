@@ -1,10 +1,10 @@
-# Example Dojo
+# Proof-of-Concept Dojo
 
-This repository features an example dojo.
+This repository features an proof-of-concept dojo.
 
 The dojo is defined by [dojo.yml](./dojo.yml).
 
-It contains two modules, `hello` and `world`.
+In addition to several others, it contains two modules, `hello` and `world`.
 
 The module `hello` features challenges `apple` and `banana`.
 
