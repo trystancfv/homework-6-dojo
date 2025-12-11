@@ -1,19 +1,24 @@
-If you have played in cybersecurity capture-the-flag (CTF) events before or have self-studied cybersecurity on [pwn.college](https://pwn.college/), you may already be familiar with how CTF challenges work: you start the challenge or access the challenge environment however it's hosted, and then you do what is hinted at in the challenge to get a string of pre-set or random text, or the "flag", to submit to get points. There are a variety of CTF challenge categories out there, such as reverse engineering, binary/server exploitation, web security, cryptography, etc. But most CTF challenges do not really cover programming/software development apart from any scripts you may write to help solve a specific challenge. This is to be expected since CTF events are grounded in testing advanced cybersecurity skills. 
+## Scenario
+In this challenge, you are a junior backend engineer at **TripleZotID**, a mid-sized company that builds authentication and account management tools for other SaaS products. Your team manages a small authentication service that primarily handles user logins and password resets. Recently, a security team at your company ran an internal audit and found that your service is **over-sharing in its logs**. In particular, it records full email addresses, session IDs, and even password reset tokens.
 
-We aim to take the CTF concept to create challenges that are grounded in the software engineering experience, creating a scenario-driven, gamified learning experience that can be delivered at scale. And so, **a majority of challenges on Codesafe will involve writing and modifying provided code in the VSCode workspace to complete the given tasks of a challenge, running the provided test cases through a 'checker' Python executable (often named `checker`), and getting the flag in the terminal if you have successfully completed the challenge**. 
+These logs are extremely useful for debugging and are eventually shipped to a centralized logging platform so that various engineers and analysts have access. Because of their value, they are also backed up and retained for long periods of time. However, if an attacker were to ever gain access to the logging system or if log files were accidentally shared, the sensitive inputs included could potentially be used to hijack accounts or impersonate users. In response to this, you’ve been asked to fortify the internal behavior of the service before it’s rolled out fully or reused in any customer products. 
 
-**You will always be working in the `/challenge` folder of the environment (these descriptions will specify otherwise if needed), so you can set your VSCode workspace to only have the `/challenge` folder loaded in the left side-bar.** Revisit the first tutorial challenge if needed!
+Within `auth_service.py` you will see a handful of functions (`login`, `request_password_reset`, `reset_password`, etc.) with intensive logging throughout. As mentioned, the logs are very helpful for debugging, but they clearly contain sensitive information. Your job is to **redesign the logging system so it preserves useful information for debugging and monitoring, without exposing any sensitive data that could be used maliciously.**
 
-If your left side-bar in VSCode is set to only have the `/challenge` folder, you will see the following files/folder relevant to the challenge:
-- `backup` - This folder will contain a non-writable copy of the original provided code that you can copy over into the file you are supposed to modify in `/challenge` if you need to start over.
-- `checker` - You will run this Python executable when you want to check your current solution to the challenge. Make sure to always run it as `$ ./checker` in the terminal. The name of this file may vary per challenge. You will not always be able to read this file in VSCode, which is intentional! In some challenges, being able to read the checker script will give away the intended solution. The file permissions can be configured so that you can execute the script, but not read it.
-- `DESCRIPTION.md` - This is the same description you read in the original challenge's description back on the main site.
-- `modify_me.py` - You will modify this file as specified in the task of this tutorial. The name of this file will vary per challenge.
+## Tasks
 
-To complete this challenge, simply modify `hello_world()` in `modify_me.py` to return `"Hello World"`. After doing that, open up a terminal in the VSCode workspace and run the following commands:
-```
-$ cd /challenge
+1. Modify the logging system in `auth_service.py` so that **sensitive data is never written to logs**. This includes, but is not limited to: raw passwords, password reset tokens, and full session identifiers.
+2. Implement safer logging patterns, such as masking or partially restricting fields (for example, masking email addresses) while still logging non-sensitive identifiers so that engineers can still correlate events.
+3. Maintain the original behavior of the authentication flows. This would include the public function interfaces, return values, as well as successful/failed login and reset behavior, all of which should remain unchanged. Additionally, all existing functionality in `auth_service.py` should continue to work as before for legitimate requests.
+Ensure that all of the test cases in `checker` pass, including tests that verify both:
+  * The authentication flows still work correctly, and
+  * Sensitive values are **no longer present** in the captured log output.
+You do not need to add or modify any of the test cases in `checker`. You may write helper functions in `auth_service.py` (for example, a helper to mask emails or centralize logging behavior). You must modify `auth_service.py` in the `/challenge` directory, but there is a non-writable copy in `/challenge/backup` in case you need to restore the original and start over.
+
+All of the test cases in `checker` must pass for the Python executable to give you the flag. In this challenge, you are unable to read the checker script.
+
+Make sure to run the checker script by doing the following in the `/challenge` directory:
+
+```bash
 $ ./checker
 ```
-
-**NOTE**: The VSCode workspace will not automatically refresh for you when switching to a new challenge. You will need to close out of the tab with your workspace and then open a new one after starting a new challenge.
