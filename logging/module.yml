@@ -1,2 +1,4 @@
-name: Logging Failures
+name: Logging Failures and Secure Observability
 challenges:
+- id: logging-leakage
+  name: Logging Leakage
