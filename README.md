@@ -4,7 +4,9 @@ This repository features an proof-of-concept dojo.
 
 The dojo is defined by [dojo.yml](./dojo.yml).
 
-In addition to several others, it contains two modules, `hello` and `world`.
+**The proof-of-concept challenge is located in the `logging` module.**
+
+In addition to several others, it also contains two modules, `hello` and `world`.
 
 The module `hello` features challenges `apple` and `banana`.
 
