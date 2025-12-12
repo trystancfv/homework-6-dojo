@@ -7,7 +7,7 @@ Within `auth_service.py` you will see a handful of functions (`login`, `request_
 
 ## Tasks
 
-1. Modify the logging system in `auth_service.py` so that **sensitive data is never written to logs**. This includes, but is not limited to: raw passwords, password reset tokens, and full session identifiers.
+1. Modify the logging system in `auth_service.py` so that **sensitive data is never written to logs**. This includes, but is not limited to: emails, raw passwords, password reset tokens, and full session identifiers.
 2. Implement safer logging patterns, such as masking or partially restricting fields (for example, masking email addresses) while still logging non-sensitive identifiers so that engineers can still correlate events.
 3. Maintain the original behavior of the authentication flows. This would include the public function interfaces, return values, as well as successful/failed login and reset behavior, all of which should remain unchanged. Additionally, all existing functionality in `auth_service.py` should continue to work as before for legitimate requests.
 Ensure that all of the test cases in `checker` pass, including tests that verify both:
