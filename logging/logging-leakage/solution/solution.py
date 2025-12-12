@@ -95,7 +95,7 @@ def _shorten_token_id(token):
         return '<none>'
     if len(token) <= 8:
         return token
-    return token [:8] + '...'
+    return token[:8] + '...'
         
 
 """
@@ -180,7 +180,7 @@ def request_password_reset(email):
     system_logger.info(
         "Generated password reset token=%s for email=%s (user=%s)",
         _shorten_token_id(new_reset_token),
-        _mask_email(user['email']),
+        masked_email,
         user['username']
     )
 
@@ -229,7 +229,6 @@ def reset_password(token, new_password):
         RESET_TOKENS.pop(token, None)
         return False
     
-    old_password = user['password']
     user['password'] = new_password
 
     system_logger.info(
