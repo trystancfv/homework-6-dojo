@@ -5,5 +5,7 @@ chmod 777 /challenge/auth_service.py
 chmod 777 /challenge/auth_demo.py
 chmod 4711 /challenge/checker
 chmod 4755 /challenge/solution/solution.py
+chmod 4755 /challenge/backup/auth_service.py
+chmod 4755 /challenge/backup/auth_demo.py
 
 rm /challenge/.init
