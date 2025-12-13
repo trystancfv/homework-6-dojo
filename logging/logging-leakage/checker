@@ -36,7 +36,7 @@ class TestAuthService(unittest.TestCase):
         
         return result, logs
     
-    # Login behavior tests:
+    # Login Behavior Tests:
 
     def test_login_success_returns_session_with_no_secrets_in_logs(self):
         username = 'john'
@@ -121,7 +121,7 @@ class TestAuthService(unittest.TestCase):
         # Tests that password does not appear.
         self.assertNotIn(password, logs)
         
-    # Password reset request behavior:
+    # Password Reset Request Behavior Tests:
 
     def test_password_reset_for_existing_email_stores_token_with_no_secrets_in_logs(self):
         email = 'mickeymouse@disney.com'
@@ -154,7 +154,7 @@ class TestAuthService(unittest.TestCase):
         # Tests that full email does not appear.
         self.assertNotIn(email, logs)
 
-    # Reset password behavior:
+    # Reset Password Behavior Tests:
 
     def test_reset_password_success_changes_password_and_no_secrets_in_logs(self):
         email = 'john@gmail.com'
@@ -248,6 +248,79 @@ class TestAuthService(unittest.TestCase):
         self.assertIsNotNone(result_login)
         self.assertTrue(len(logs_login) > 0)
         self.assertIn('Login', logs_login)
+
+    # ChatGPT Generated Test Cases:
+
+    def test_no_user_secrets_appear_in_logs_across_common_flows(self):
+        """
+        End-to-end sanity: across a typical sequence of operations, no full
+        emails, raw passwords, reset tokens, or session IDs should appear
+        in any log output.
+        """
+        ip = '198.51.100.99'
+
+        # 1. Failed login attempt.
+        _, logs1 = self._run_and_compile_logs(auth_service.login, 'john', 'wrong_pw', ip)
+
+        # 2. Successful login attempt.
+        result_success, logs2 = self._run_and_compile_logs(auth_service.login, 'john', 'j0hn_pw', ip)
+        self.assertIsNotNone(result_success)
+        session_id = result_success['session_id']
+
+        # 3. Password reset request for an existing email.
+        email = 'john@gmail.com'
+        token, logs3 = self._run_and_compile_logs(auth_service.request_password_reset, email)
+        # token may be None if implementation changes, but in current design it should be a string.
+        self.assertIsInstance(token, str)
+
+        # 4. Password reset success path.
+        new_password = 'totally_new_pw123'
+        reset_result, logs4 = self._run_and_compile_logs(auth_service.reset_password, token, new_password)
+        self.assertTrue(reset_result)
+
+        # Combine logs from all these actions.
+        all_logs = "\n".join([logs1, logs2, logs3, logs4])
+
+        # No full emails or passwords from TEST_USERS should ever appear.
+        for user in TEST_USERS:
+            self.assertNotIn(user['email'], all_logs)
+            self.assertNotIn(user['password'], all_logs)
+
+        # The new password should not appear anywhere.
+        self.assertNotIn(new_password, all_logs)
+
+        # The full reset token and session ID should also not appear.
+        self.assertNotIn(token, all_logs)
+        self.assertNotIn(session_id, all_logs)
+
+    def test_login_without_ip_address_logs_safely(self):
+        """
+        If ip_address is omitted, login should still work and logs should
+        not contain passwords or session IDs.
+        """
+        username = 'john'
+        password = 'j0hn_pw'
+
+        result, logs = self._run_and_compile_logs(auth_service.login, username, password)
+
+        # Functional behavior.
+        self.assertIsNotNone(result)
+        self.assertEqual(result['username'], username)
+        session_id = result['session_id']
+
+        # Logging behavior.
+        self.assertIn('Login', logs)
+        self.assertIn(username, logs)
+        # No secrets:
+        self.assertNotIn(password, logs)
+        self.assertNotIn(session_id, logs)
+
+    def test_system_logger_name_remains_auth_logger(self):
+        """
+        The challenge specifies that the logger name must remain 'auth_logger'.
+        This test enforces that invariant.
+        """
+        self.assertEqual(auth_service.system_logger.name, 'auth_logger')
 
 
 # Taken from https://stackoverflow.com/questions/13550039/how-to-use-python-unit-tests-in-self-contained-program
