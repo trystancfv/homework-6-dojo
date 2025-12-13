@@ -15,7 +15,7 @@ Within `auth_service.py` you will see a handful of functions (`login`, `request_
 
 ## Tasks
 1. Modify the logging system in `auth_service.py` so that **sensitive data is never written to logs**. This includes, but is not limited to: full email addresses, raw passwords, password reset tokens, and full session identifiers.
-2. Implement safer logging patterns, such as masking or partially restricting fields (e.g. a***@example.com), while still logging non-sensitive identifiers so engineers can correlate events. Good logging is intentional.
+2. Implement safer logging patterns, such as masking or partially restricting fields (e.g. a***@example.com), while still logging non-sensitive identifiers so engineers can correlate events.
 3. Maintain the original behavior of the authentication flows. Your modifications **must not change**: public function interfaces, return values, as well as successful/failed login and reset behavior. In line with this, all existing authentication functionality in `auth_service.py` should continue to work as before for legitimate requests.
 
 You do not need to add or modify any of the test cases in `checker`. You may write helper functions in `auth_service.py` (for example, a helper to mask emails or centralize logging behavior). You must modify `auth_service.py` in the `/challenge` directory, but there is a non-writable copy in `/challenge/backup` in case you need to restore the original and start over.
