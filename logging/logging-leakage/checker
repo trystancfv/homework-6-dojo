@@ -225,7 +225,8 @@ class TestAuthService(unittest.TestCase):
 
         new_password = 'j0hn_new_pw'
         result, logs = self._run_and_compile_logs(auth_service.reset_password, token, new_password)
-
+        
+        # Function tests.
         self.assertFalse(result)
         self.assertIn('Password reset failed', logs)
         self.assertIn('references nonexistent user', logs)
