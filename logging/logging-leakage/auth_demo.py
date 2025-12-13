@@ -47,10 +47,10 @@ def run_demo():
         print(f" - {u['username']} / {u['email']} (password={u['password']})")
 
     print("\nAttempting login with wrong password...")
-    login('alex', 'wrong_password', ip_address='203.0.113.10')
+    login('alex', 'wrong_password', ip_address='203.0.113.20')
 
     print("\nAttempting login with correct password...")
-    session = login('alex', 'alex123', ip_address='203.0.113.10')
+    session = login('alex', 'alex123', ip_address='203.0.113.20')
     print("Session:", session)
 
     print("\nRequesting password reset for bob@example.com...")

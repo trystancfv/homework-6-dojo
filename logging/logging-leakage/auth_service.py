@@ -6,6 +6,7 @@ from datetime import datetime, timezone, timedelta
 """
     Basic configurations for logging. Please see the following documentation for more information:
     https://docs.python.org/3/library/logging.html
+    DO NOT CHANGE THE NAME OF THE LOGGER. Doing so will prevent the checker script from running properly.
 """
 system_logger = logging.getLogger("auth_logger")
 if not system_logger.handlers:
